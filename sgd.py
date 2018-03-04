@@ -1,4 +1,3 @@
-
 from math import exp
 import numpy as np
 import re
@@ -96,9 +95,11 @@ class SGD:
 		arr_sumerror = []
 		self.initiate_array()
 		self.random_theta()
+		print "DATA SET"
+		print "========"
 		self.get_data()
 		print self.DATA
-		print "THETA LAMA"
+		print "THETA"
 		print "=========="
 		print self.theta
 		for i in range(self.EPOCH):
@@ -117,13 +118,17 @@ class SGD:
 				self.theta.append(formula)
 			#print self.convert_to_numpy(self.arrh_func)
 			#print self.convert_to_numpy(self.arrsignoid)
+			print "ERROR KE EPOCH "+str(i+1)
+			print "==========================="
 			self.arrerror = self.convert_to_numpy(self.arrerror)
-			#print self.arrerror
+			print self.arrerror
 			#print self.convert_to_numpy(self.arrprediction)
 			#print self.convert_to_numpy(self.arrdelta)
 			arr_sumerror.append(self.sum_error())
 			self.initiate_array()
 			self.change_theta()
+		print "TOTAL ERROR"
+		print "==========="
 		arrerrornp = self.convert_to_numpy(arr_sumerror)
 		print arrerrornp
 		plt.plot(arrerrornp)
