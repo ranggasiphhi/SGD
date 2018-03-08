@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class SGD:
 	ROW_DATA = 100
 	DATA = np.zeros((100,5))
-	ALPHA = 0.1
+	ALPHA = 0.8
 	EPOCH = 60
 
 	def initiate_array(self):
