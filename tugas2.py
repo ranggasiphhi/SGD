@@ -67,8 +67,12 @@ class SGD:
 	def convert_to_numpy(self,arr):
 		return np.array(arr)
 
-	def h_function(self,data,i):
+	def h_function_training(self,data,i):
 		return data[i][0] * self.theta[i][0] + data[i][1] * self.theta[i][1] + data[i][2] * self.theta[i][2] + data[i][3] * self.theta[i][3] + self.theta[i][4]
+
+	def h_function_validation(self,data,i):
+		#print self.theta_validation
+		return data[i][0] * self.theta_validation[0] + data[i][1] * self.theta_validation[1] + data[i][2] * self.theta_validation[2] + data[i][3] * self.theta_validation[3] + self.theta_validation[4]
 
 	def signoid(self,i):
 		return 1 / (1 + exp(-self.arrh_func[i]))
@@ -104,8 +108,6 @@ class SGD:
 		return np.average(self.arrerror)
 
 	def h_to_prediction(self,data,j):
-		formula = self.h_function(data,j)
-		self.arrh_func.append(formula)
 		formula = self.signoid(j)
 		self.arrsignoid.append(formula)
 		formula = self.error(data,j)
@@ -126,17 +128,23 @@ class SGD:
 		return self.convert_to_numpy(self.arr_sumerror)
 
 
-	def sgd(self,data):	
+	def sgd(self,data):
+		self.theta_validation = []	
 		for j in range(data.shape[0]):
+			formula = self.h_function_training(data,j)
+			self.arrh_func.append(formula)
 			self.h_to_prediction(data,j)
 			formula = self.delta_theta(data,j)
 			self.arrdelta.append(formula)
 			formula = self.new_theta(j)
 			self.theta.append(formula)
+		self.theta_validation = self.theta[self.TRAINING_DATA.shape[0]]
 		return self.counting_error()
 
 	def validation(self,data):
 		for j in range(data.shape[0]):
+			formula = self.h_function_validation(data,j)
+			self.arrh_func.append(formula)
 			self.h_to_prediction(data,j)
 		return self.counting_error()
 
@@ -169,9 +177,12 @@ class SGD:
 		for i in range(self.EPOCH):
 			error_training[i] = self.sgd(self.TRAINING_DATA)
 			self.initiate_array()
-			self.change_theta(self.TRAINING_DATA.shape[0])
-			error_validating[i] = self.sgd(self.VALIDATION_DATA)
+			#print self.convert_to_numpy(self.theta)
+			error_validating[i] = self.validation(self.VALIDATION_DATA)
 			self.initiate_array()
+			self.change_theta(self.TRAINING_DATA.shape[0])
+		print self.theta
+		print self.theta_validation
 		print "ERROR TRAINING"
 		print "==========="
 		print error_training
