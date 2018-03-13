@@ -28,6 +28,7 @@ class SGD:
 
 	def random_theta(self):
 		self.theta = [ [0.5, 0.1, 0.1, 0.9, 0.9] ]
+		#self.theta = [ [0.1, 0.15, 0.2, 0.3, 0.4] ]
 
 	def change_theta(self,rows):
 		old = []
